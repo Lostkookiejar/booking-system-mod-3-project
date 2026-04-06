@@ -1,27 +1,20 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Button, Modal } from "react-bootstrap";
 
 export default function RestaurantModal({ show, handleClose }) {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
   return (
-    <Modal open={show} onClose={handleClose}>
-      <Box sx={style}>
-        <Typography variant="h6" component="h2">
-          Text in a modal
-        </Typography>
-        <Typography sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-      </Box>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Modal heading</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={handleClose}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 }

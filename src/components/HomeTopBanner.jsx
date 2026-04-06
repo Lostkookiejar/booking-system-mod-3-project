@@ -46,10 +46,11 @@ export default function HomeTopBanner({ setShow }) {
 
           <Container className="d-grid gap-2">
             <Button
+              onClick={setShow}
               size="lg"
               style={{ borderRadius: 50 }}
               className={footerStyle}
-              variant="success"
+              variant="danger"
             >
               Registering a Restaurant?
             </Button>

@@ -27,6 +27,7 @@ export default function HomePage() {
       <Reservations
         handleLogout={handleLogout}
         setShow={() => setShow("edit")}
+        handleClose={() => setShow(null)}
       />
     </>
   );

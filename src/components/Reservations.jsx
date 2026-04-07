@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Container, Spinner } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import ReservationCard from "./ReservationCard";
 
-export default function Reservations({ handleLogout }) {
+export default function Reservations({ handleLogout, setShow, handleClose }) {
   const [rsrvs, setRsrvs] = useState([]);
 
   const fetchPosts = (userId) => {
@@ -29,12 +29,22 @@ export default function Reservations({ handleLogout }) {
           <h1 className="mb-3">
             <strong>Reservations</strong>
           </h1>
+
           {rsrvs.map((rsrv) => (
-            <ReservationCard ele={rsrv} />
+            <ReservationCard
+              ele={rsrv}
+              setShow={setShow}
+              handleClose={handleClose}
+            />
           ))}
         </>
       )}
-      <Button onClick={handleLogout} className="rounded-pill" variant="warning">
+
+      <Button
+        onClick={handleLogout}
+        className="rounded-pill mt-4"
+        variant="warning"
+      >
         Log Out
       </Button>
     </Container>

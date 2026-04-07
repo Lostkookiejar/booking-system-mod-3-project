@@ -2,11 +2,11 @@ import { useContext, useState } from "react";
 import { getDay, setHours, setMinutes } from "date-fns";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import { ReservContext } from "../contexts/ReservContext";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { ReservContext } from "../contexts/ReservContext";
 export default function RestaurantModal({ show, handleClose }) {
-  const [reservs, setReservs] = useState([]);
+  const { staged } = useContext(ReservContext);
   const [userName, setUserName] = useState("");
   const [userDesc, setUserDesc] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -52,7 +52,7 @@ export default function RestaurantModal({ show, handleClose }) {
           user_id: userId,
         },
       ];
-      axios
+      await axios
         .post(`${url}/reservs`, data[0])
         .then((response) => {
           console.log("Success: ", response.data);
@@ -65,22 +65,27 @@ export default function RestaurantModal({ show, handleClose }) {
     }
   };
 
-  const editReserv = () => {
-    const updatedReservs = reservs.map((ele) => {
-      if (ele.created_at === staged[0].created_at) {
-        return {
-          created_at: ele.created_at,
-          name: userName,
-          description: userDesc,
-          date: startDate.toString(),
-          phone: userPhone,
-          email: userEmail,
-        };
-      }
-    });
-    setReservs(updatedReservs);
-    handleClose();
-    clearFormControl();
+  const editReserv = async () => {
+    const data = [
+      {
+        name: userName,
+        description: userDesc,
+        date: startDate.toString(),
+        phone: userPhone,
+        email: userEmail,
+        created_at: staged,
+      },
+    ];
+    await axios
+      .put(`${url}/reservs`, data[0])
+      .then((response) => {
+        console.log(response);
+        handleClose();
+        clearFormControl();
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   };
 
   const handleSubmit = (e) => {

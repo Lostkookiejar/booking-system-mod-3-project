@@ -1,6 +1,29 @@
+import { useContext } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import { ReservContext } from "../contexts/ReservContext";
+import axios from "axios";
 
-export default function ReservationCard({ ele }) {
+export default function ReservationCard({ ele, setShow, handleClose }) {
+  const { setStaged } = useContext(ReservContext);
+  const url = "http://localhost:3000";
+  const handleEdit = (created_at) => {
+    setStaged(created_at);
+    setShow();
+  };
+
+  const handleDelete = async (created_at) => {
+    console.log(created_at);
+    await axios
+      .delete(`${url}/reservs/${created_at}`)
+      .then((response) => {
+        console.log(response);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <Card className="mb-4 p-2" key={ele.created_at}>
       <Card.Header className="bg-info">
@@ -29,10 +52,17 @@ export default function ReservationCard({ ele }) {
         </Row>
       </Card.Body>
       <Card.Footer className="d-flex flex-row justify-content-end align-items-end">
-        <Button className="mx-1 px-4">
+        <Button
+          className="mx-1 px-4"
+          onClick={() => handleEdit(ele.created_at)}
+        >
           <i class="bi bi-pencil-square"></i>
         </Button>
-        <Button className="mx-1 px-4" variant="danger">
+        <Button
+          className="mx-1 px-4"
+          variant="danger"
+          onClick={() => handleDelete(ele.created_at)}
+        >
           <i class="bi bi-x-circle-fill"></i>
         </Button>
       </Card.Footer>

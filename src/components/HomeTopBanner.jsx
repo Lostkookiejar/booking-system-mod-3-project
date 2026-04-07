@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  FormControl,
-  Row,
-} from "react-bootstrap";
+import { Button, Card, Container } from "react-bootstrap";
 import { bannerStyle, footerStyle } from "./style";
 
 export default function HomeTopBanner({ setShow }) {

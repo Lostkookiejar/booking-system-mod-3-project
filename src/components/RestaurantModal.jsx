@@ -3,13 +3,16 @@ import { getDay, setHours, setMinutes } from "date-fns";
 import { Button, Form, FormControl, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { ReservContext } from "../contexts/ReservContext";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 export default function RestaurantModal({ show, handleClose }) {
-  const { reservs, setReservs, staged } = useContext(ReservContext);
+  const [reservs, setReservs] = useState([]);
   const [userName, setUserName] = useState("");
   const [userDesc, setUserDesc] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [userPhone, setUserPhone] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const url = "http://localhost:3000";
 
   const isWeekday = (date) => {
     const currentDate = new Date();
@@ -32,29 +35,43 @@ export default function RestaurantModal({ show, handleClose }) {
     setUserEmail("");
   };
 
-  const newReserv = () => {
-    setReservs([
-      ...reservs,
-      {
-        id: Date.now(),
-        name: userName,
-        desc: userDesc,
-        date: startDate.toString(),
-        phone: userPhone,
-        email: userEmail,
-      },
-    ]);
-    handleClose();
-    clearFormControl();
+  const newReserv = async () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
+      const data = [
+        {
+          created_at: Date.now(),
+          name: userName,
+          description: userDesc,
+          date: startDate.toString(),
+          phone: userPhone,
+          email: userEmail,
+          user_id: userId,
+        },
+      ];
+      axios
+        .post(`${url}/reservs`, data[0])
+        .then((response) => {
+          console.log("Success: ", response.data);
+          handleClose();
+          clearFormControl();
+        })
+        .catch((error) => {
+          console.error("Error: ", error);
+        });
+    }
   };
 
   const editReserv = () => {
     const updatedReservs = reservs.map((ele) => {
-      if (ele.id === staged[0].id) {
+      if (ele.created_at === staged[0].created_at) {
         return {
-          id: ele.id,
+          created_at: ele.created_at,
           name: userName,
-          desc: userDesc,
+          description: userDesc,
           date: startDate.toString(),
           phone: userPhone,
           email: userEmail,

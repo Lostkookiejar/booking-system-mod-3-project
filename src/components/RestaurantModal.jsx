@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { ReservContext } from "../contexts/ReservContext";
+import { url } from "../../url";
 export default function RestaurantModal({ show, handleClose }) {
   const { staged } = useContext(ReservContext);
   const [userName, setUserName] = useState("");
@@ -12,7 +13,6 @@ export default function RestaurantModal({ show, handleClose }) {
   const [startDate, setStartDate] = useState(null);
   const [userPhone, setUserPhone] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const url = "http://localhost:3000";
 
   const isWeekday = (date) => {
     const currentDate = new Date();

@@ -2,10 +2,9 @@ import { useContext } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { ReservContext } from "../contexts/ReservContext";
 import axios from "axios";
-
+import { url } from "../../url";
 export default function ReservationCard({ ele, setShow, handleClose }) {
   const { setStaged } = useContext(ReservContext);
-  const url = "http://localhost:3000";
   const handleEdit = (created_at) => {
     setStaged(created_at);
     setShow();

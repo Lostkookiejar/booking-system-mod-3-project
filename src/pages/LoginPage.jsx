@@ -3,10 +3,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import { url } from "../../url";
 export default function LoginPage() {
   const loginImage = "../../tosca-dining-area.jpg";
-  const url = "http://localhost:3000";
   const [modalShow, setModalShow] = useState(null);
   const handleShowSignUp = () => setModalShow("SignUp");
   const handleShowsLogin = () => setModalShow("Login");
@@ -35,6 +34,11 @@ export default function LoginPage() {
       console.log("signing up...");
       const res = await axios.post(`${url}/signup`, { username, password });
       console.log(res.data);
+      const res1 = await axios.post(`${url}/login`, { username, password });
+      if (res1.data && res1.data.auth === true && res1.data.token) {
+        setAuthToken(res1.data.token);
+        console.log("Login success, token saved");
+      }
     } catch (error) {
       console.error(error);
     }
